@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "db_struct.h"
-
+#include "db_struct.c"
 int main() {
     FILE *file;
     char buffer[100];
@@ -19,7 +19,7 @@ int main() {
         add_student(&school.grade[new_student->_grade - 1].classes[new_student->_class - 1], new_student);
     }
     fclose(file);
-    print_student(&school);
+    //print_student(&school);
     free_student(&school);
     return 0;
 }

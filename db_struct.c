@@ -2,7 +2,6 @@
 
 
 Student* initStudent(char* line) {
-    char* token;
     Student* student = (Student*) malloc(sizeof(Student));
     char firstName[MAX_NAME_LENGTH], lastName[MAX_NAME_LENGTH], phoneNumber[MAX_PHONE_LENGTH];
     int grade, class, scores[SCORE_COUNT];
@@ -41,7 +40,7 @@ void add_student(Class* class, Student* new_student) {
     if (current_student == NULL) {
         class->studentHead = new_student;
     } else  {
-        new_student->_next = current_student;
+        new_student->_next = (struct Student *) current_student;
         class->studentHead = new_student;
     }
 }
@@ -56,7 +55,7 @@ void print_student(School* school){
                 for (int k = 0; k < 10; ++k) {
                     printf( "%i, ", current_student->_scores[k]);
                 }
-                current_student = current_student->_next;
+                current_student = (Student *) current_student->_next;
             }
         }
     }
@@ -68,7 +67,7 @@ void free_student(School* school){
             Student* current_student = school->grade[i].classes[j].studentHead;
             while (current_student != NULL) {
                 Student* temp = current_student;
-                current_student = current_student->_next;
+                current_student = (Student *) current_student->_next;
                 free(temp);
             }
         }

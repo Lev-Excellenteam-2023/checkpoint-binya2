@@ -1,5 +1,6 @@
 #ifndef CHECKPOINT_BINYA2_DB_STRUCT_H
 #define CHECKPOINT_BINYA2_DB_STRUCT_H
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
