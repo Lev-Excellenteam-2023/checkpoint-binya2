@@ -41,9 +41,14 @@ Student* find_student(School* school, char* firstName, char* lastName);
 void print_students(School* school);
 void print_student(Student* student);
 bool delete_student(School* school, char* firstName, char* lastName,int grade, int class);
-bool update_student(School* school, char* firstName, char* lastName, const int* grade,const int* class, const int* scores);
+bool update_student(School* school, char* firstName, char* lastName, const int* scores);
 Student* recevie_students_to_departure(School* school);
 int avg(Student* student);
 void deep_copy_student(Student* target, Student* source);
 int receive_average_by_class(School* school ,int grade, int score);
+Student** receive_10_outstanding_students_in_school(School* school, int score);
+Student* receive_10_outstanding_students_in_grade(Grade* grade, int score);
+void insert_exellent_student(Student exellent[10], Student* student ,int score);
+void print_exellent_students(Student** exellent);
+void free_exellent_students(Student** exellent);
 #endif //CHECKPOINT_BINYA2_DB_STRUCT_H

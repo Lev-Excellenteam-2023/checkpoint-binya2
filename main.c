@@ -1,24 +1,10 @@
 #include <stdio.h>
 #include "db_struct.h"
+#include "db_struct.c"
+char* student_to_buffer(Student* current_student, int grade, int class);
+bool save_data_from_file(School* school, char* file_path);
+void enter_to_file(School* school);
 
-
-
-bool save_data_from_file(School* school, char* file_path){
-    FILE *file;
-    char buffer[100];
-    file = fopen(file_path, "r");
-    if (file == NULL) {
-        printf("Error opening the file.\n");
-        return false;
-    }
-    Student* new_student = NULL;
-    while (fgets(buffer, sizeof(buffer), file) != NULL) {
-        new_student = initStudent_buffer(buffer);
-        add_student(&school->grade[new_student->_grade - 1].classes[new_student->_class - 1], new_student);
-    }
-    fclose(file);
-    return true;
-}
 
 int main() {
     School school;
@@ -47,6 +33,7 @@ int main() {
 
         switch (choice) {
             case 0:
+                free_school(&school);
                 return 0;
             case 1:
                 printf("Enter first name : ");
@@ -86,15 +73,11 @@ int main() {
                 scanf("%s", firstName);
                 printf("Enter last name : ");
                 scanf("%s", lastName);
-                printf("Enter grade number: ");
-                scanf("%i", &grade);
-                printf("Enter class number: ");
-                scanf("%i", &class);
                 for (int i = 0; i < 10; ++i) {
                     printf("Enter new score number %i: ", i + 1);
                     scanf("%i", &scores[i]);
                 }
-                if (update_student(&school, firstName, lastName, &grade, &class, scores)){
+                if (update_student(&school, firstName, lastName, scores)){
                     printf("Student updated successfully\n");
                 } else {
                     printf("Student not found\n");
@@ -105,16 +88,22 @@ int main() {
                 scanf("%s", firstName);
                 printf("Enter last name : ");
                 scanf("%s", lastName);
-                student = find_student(&school, firstName, lastName);
+                student = malloc(sizeof(Student));
+                deep_copy_student((Student *) student, find_student(&school, firstName, lastName));
                 if (student != NULL){
                     printf("Student found\n");
                     print_student(student);
                 } else {
                     printf("Student not found\n");
                 }
-                break;
+                free(student);
                 break;
             case 5:
+                printf("Enter score number: ");
+                scanf("%i", &score);
+                Student** exel_student = (Student **) receive_10_outstanding_students_in_school(&school, score);
+                print_exellent_students(exel_student);
+                free_exellent_students(exel_student);
                 break;
             case 6:
                 student = (Student *) recevie_students_to_departure(&school);
@@ -129,14 +118,61 @@ int main() {
                 printf("Average is: %i\n", receive_average_by_class(&school, grade-1, score-1));
                 break;
             case 8:
-                print_students(&school);
+                enter_to_file(&school);
                 break;
             default:
                 printf("invalid choice\n");
         }
     }
+}
 
-    print_students(&school);
-    free_school(&school);
-    return 0;
+bool save_data_from_file(School* school, char* file_path){
+    FILE *file;
+    char buffer[100];
+    file = fopen(file_path, "r");
+    if (file == NULL) {
+        printf("Error opening the file.\n");
+        return false;
+    }
+    Student* new_student = NULL;
+    while (fgets(buffer, sizeof(buffer), file) != NULL) {
+        new_student = initStudent_buffer(buffer);
+        add_student(&school->grade[new_student->_grade - 1].classes[new_student->_class - 1], new_student);
+    }
+    fclose(file);
+    return true;
+}
+
+void enter_to_file(School* school){
+    char* buffer;
+    FILE *file;
+    file = fopen("/home/benny/exelenteam/checkpoint-binya2/students_with_class_output.txt", "w");
+    if (file == NULL) {
+        printf("Error opening the file.\n");
+        return;
+    }
+    for (int i = 0; i < 12; i++) {
+        for (int j = 0; j < 10; j++) {
+            Student* current_student = school->grade[i].classes[j].studentHead;
+            while(current_student != NULL){
+                buffer = student_to_buffer(current_student,i+1,j+1);
+                fputs(buffer, file);
+                fputc('\n', file);
+                current_student = (Student *) current_student->_next;
+                free(buffer);
+            }
+        }
+    }
+    fclose(file);
+}
+
+char* student_to_buffer(Student* current_student, int grade, int class){
+    char* buffer = (char *) malloc(100 * sizeof(char));
+    sprintf(buffer, "%s %s %s %i %i %i %i %i %i %i %i %i %i %i %i",
+            current_student->_firstName, current_student->_lastName, current_student->_phoneNumber,
+            grade, class, current_student->_scores[0], current_student->_scores[1], current_student->_scores[2],
+            current_student->_scores[3], current_student->_scores[4], current_student->_scores[5],
+            current_student->_scores[6], current_student->_scores[7], current_student->_scores[8],
+            current_student->_scores[9]);
+    return buffer;
 }

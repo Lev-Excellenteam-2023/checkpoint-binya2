@@ -134,13 +134,11 @@ void free_school(School* school){
     }
 }
 
-bool update_student(School* school, char* firstName, char* lastName, const int* grade,const int* class, const int* scores){
+bool update_student(School* school, char* firstName, char* lastName, const int* scores){
     Student* student = find_student(school, firstName, lastName);
     if (student != NULL) {
         strcpy(student->_firstName, firstName);
         strcpy(student->_lastName, lastName);
-        student->_grade =  *grade;
-        student->_class =  *class;
         for (int i = 0; i < 10; i++) {
             student->_scores[i] = scores[i];
         }
@@ -161,10 +159,9 @@ Student* recevie_students_to_departure(School* school){
                         deep_copy_student((Student *)temp, current_student);
                         departure = temp;
                     }else{
-                        Student* temp = (Student*) malloc(sizeof(Student));
+                        Student* temp;
                         temp = (Student*) malloc(sizeof(Student));
                         deep_copy_student((Student *)temp, current_student);
-                        Student* temp1 = departure;
                         temp ->_next = (struct Student *) departure;
                         departure = temp;
                     }
@@ -208,4 +205,76 @@ int receive_average_by_class(School* school ,int grade, int score){
         }
     }
     return sum/count;
+}
+
+Student** receive_10_outstanding_students_in_school(School* school , int score){
+    Student** exellent = (Student**) malloc(sizeof(Student) * 12);
+    for (int i = 0; i < 12; i++) {
+        exellent[i] = receive_10_outstanding_students_in_grade(&school->grade[i], score);
+    }
+    return exellent;
+}
+
+Student* receive_10_outstanding_students_in_grade(Grade* grade, int score) {
+    Student* exellent = (Student*) malloc(sizeof(Student)*10);
+    int count = 0;
+    for (int i = 0; i < 10; i++) {
+        exellent[i]._scores[score] = count++;
+    }
+    for (int i = 0; i < 10; i++) {
+        Student* current_student = grade->classes[i].studentHead;
+        while (current_student != NULL) {
+            insert_exellent_student(exellent, current_student, score);
+            current_student = (Student *) current_student->_next;
+        }
+    }
+    return exellent;
+}
+
+void insert_exellent_student(Student exellent[10], Student* student ,int score){
+    Student* temp = (Student*) malloc(sizeof(Student));
+    Student* temp1 = (Student*) malloc(sizeof(Student));
+    for (int i = 9; i >= 0; i--) {
+        if (student->_scores[score] > exellent[i]._scores[score]) {
+            if (i == 0) {
+                free(temp);
+                free(temp1);
+                return;
+            }
+            deep_copy_student((Student *) temp,&exellent[i]);
+            deep_copy_student(&exellent[i], student);
+            i--;
+            for (int j = i ; j >= 0; j--) {
+                deep_copy_student((Student *) temp1, &exellent[j]);
+                deep_copy_student(&exellent[j], (Student *) temp);
+                deep_copy_student((Student *) temp, (Student *) temp1);
+                if (j == 0) {
+                    free(temp);
+                    free(temp1);
+                    return;
+                }
+            }
+        }
+    }
+    free(temp);
+    free(temp1);
+}
+
+void print_exellent_students(Student** exellent){
+    for (int i = 0; i < 12; i++) {
+        printf("\ngrade %i", i+1);
+        for (int j = 0; j < 10; j++) {
+            print_student(&exellent[i][j]);
+        }
+    }
+}
+
+void free_exellent_students(Student** exellent){
+    for (int i = 0; i < 12; i++) {
+        for (int j = 0; j < 10; ++j) {
+            free(&exellent[i][j]);
+        }
+        free(exellent[i]);
+    }
+    free(exellent);
 }
