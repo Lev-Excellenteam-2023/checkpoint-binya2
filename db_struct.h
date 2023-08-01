@@ -4,6 +4,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+
+#define bool int
+#define true 1
+#define false 0
 #define MAX_NAME_LENGTH 50
 #define MAX_PHONE_LENGTH 11
 #define SCORE_COUNT 10
@@ -28,9 +32,14 @@ typedef struct {
 
 void initGrade(Grade* grade);
 void initSchool(School* school);
-Student* initStudent(char* line);
+Student* initStudent_buffer(char* buffer);
+Student* initStudent(char* firstName, char* lastName, char* phoneNumber, const int* scores);
 void add_student(Class* class, Student* new_student);
-void print_student(School* school);
+Student* find_student(School* school, char* firstName, char* lastName);
+void print_students(School* school);
+void print_student(Student* student);
 void free_student(School* school);
+bool delete_student(School* school, char* firstName, char* lastName,int grade, int class);
+bool update_student(School* school, char* firstName, char* lastName, const int* grade,const int* class, const int* scores);
 
 #endif //CHECKPOINT_BINYA2_DB_STRUCT_H
