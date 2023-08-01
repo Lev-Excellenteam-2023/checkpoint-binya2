@@ -26,14 +26,14 @@ int main() {
     Student* student = NULL;
     char firstName[MAX_NAME_LENGTH], lastName[MAX_NAME_LENGTH], phoneNumber[MAX_PHONE_LENGTH];
     int grade, class, scores[SCORE_COUNT], choice,  score;
-//    if (save_data_from_file(&school, "/home/benny/exelenteam/checkpoint-binya2/students_with_class.txt")){
-//        printf("Data loaded successfully\n");
-//    } else {
-//        printf("Failed to load data\n");
-//        return 1;
-//    }
+    if (save_data_from_file(&school, "/home/benny/exelenteam/checkpoint-binya2/students_with_class.txt")){
+        printf("Data loaded successfully\n");
+    } else {
+        printf("Failed to load data\n");
+        return 1;
+    }
     while (true){
-        printf("insert\n"
+        printf("\ninsert\n"
                "1 To admit a new student,\n"
                "2 To delete a student,\n"
                "3 To change information,\n"
