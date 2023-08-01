@@ -117,8 +117,16 @@ int main() {
             case 5:
                 break;
             case 6:
+                student = (Student *) recevie_students_to_departure(&school);
+                print_student(student);
+                free_student(student);
                 break;
             case 7:
+                printf("Enter grade number: ");
+                scanf("%i", &grade);
+                printf("Enter score number: ");
+                scanf("%i", &score);
+                printf("Average is: %i\n", receive_average_by_class(&school, grade-1, score-1));
                 break;
             case 8:
                 print_students(&school);
@@ -129,6 +137,6 @@ int main() {
     }
 
     print_students(&school);
-    free_student(&school);
+    free_school(&school);
     return 0;
 }

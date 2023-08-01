@@ -51,6 +51,15 @@ Student* find_student(School* school, char* firstName, char* lastName){
     return NULL;
 }
 
+void free_student(Student* student){
+    while(student != NULL){
+        Student* temp = (Student*) student->_next;
+        free(student);
+        student = temp;
+    }
+    free(student);
+}
+
 void initGrade(Grade* grade){
     for (int i = 0; i < 10; i++) {
         grade->classes[i].studentHead = NULL;
@@ -116,15 +125,11 @@ bool delete_student(School* school, char* firstName, char* lastName,int grade, i
     return false;
 }
 
-void free_student(School* school){
+void free_school(School* school){
     for (int i = 0; i < 12; i++) {
         for (int j = 0; j < 10; j++) {
             Student* current_student = school->grade[i].classes[j].studentHead;
-            while (current_student != NULL) {
-                Student* temp = current_student;
-                current_student = (Student *) current_student->_next;
-                free(temp);
-            }
+            free_student(current_student);
         }
     }
 }
@@ -142,4 +147,65 @@ bool update_student(School* school, char* firstName, char* lastName, const int* 
         return true;
     }
     return false;
+}
+
+Student* recevie_students_to_departure(School* school){
+    Student* departure = NULL;
+    for (int i = 0; i < 12; i++) {
+        for (int j = 0; j < 10; j++) {
+            Student* current_student = school->grade[i].classes[j].studentHead;
+            while (current_student != NULL) {
+                if ( avg(current_student)< 60) {
+                    if(departure == NULL){
+                        Student* temp = (Student*) malloc(sizeof(Student));
+                        deep_copy_student((Student *)temp, current_student);
+                        departure = temp;
+                    }else{
+                        Student* temp = (Student*) malloc(sizeof(Student));
+                        temp = (Student*) malloc(sizeof(Student));
+                        deep_copy_student((Student *)temp, current_student);
+                        Student* temp1 = departure;
+                        temp ->_next = (struct Student *) departure;
+                        departure = temp;
+                    }
+                }
+                current_student = (Student *) current_student->_next;
+            }
+        }
+    }
+    return departure;
+}
+
+int avg(Student* student){
+    int sum = 0;
+    for (int i = 0; i < 10; i++) {
+        sum += student->_scores[i];
+    }
+    return sum/10;
+}
+
+void deep_copy_student( Student* target, Student* source){
+    strcpy(target->_firstName, source->_firstName);
+    strcpy(target->_lastName, source->_lastName);
+    strcpy(target->_phoneNumber, source->_phoneNumber);
+    target->_grade = source->_grade;
+    target->_class = source->_class;
+    for (int i = 0; i < 10; i++) {
+        target->_scores[i] = source->_scores[i];
+    }
+    target->_next = NULL;
+}
+
+int receive_average_by_class(School* school ,int grade, int score){
+    int sum = 0;
+    int count = 0;
+    for (int i = 0; i < 10; i++) {
+        Student* current_student = school->grade[grade].classes[i].studentHead;
+        while (current_student != NULL) {
+            sum += current_student->_scores[score];
+            count++;
+            current_student = (Student *) current_student->_next;
+        }
+    }
+    return sum/count;
 }

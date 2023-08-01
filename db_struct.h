@@ -34,12 +34,16 @@ void initGrade(Grade* grade);
 void initSchool(School* school);
 Student* initStudent_buffer(char* buffer);
 Student* initStudent(char* firstName, char* lastName, char* phoneNumber, const int* scores);
+void free_student(Student* student);
+void free_school(School* school);
 void add_student(Class* class, Student* new_student);
 Student* find_student(School* school, char* firstName, char* lastName);
 void print_students(School* school);
 void print_student(Student* student);
-void free_student(School* school);
 bool delete_student(School* school, char* firstName, char* lastName,int grade, int class);
 bool update_student(School* school, char* firstName, char* lastName, const int* grade,const int* class, const int* scores);
-
+Student* recevie_students_to_departure(School* school);
+int avg(Student* student);
+void deep_copy_student(Student* target, Student* source);
+int receive_average_by_class(School* school ,int grade, int score);
 #endif //CHECKPOINT_BINYA2_DB_STRUCT_H
