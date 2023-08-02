@@ -1,0 +1,1 @@
+cmd_/home/benny/exelenteam/checkpoint-binya2/task6/main.mod := printf '%s\n'   main.o | awk '!x[$$0]++ { print("/home/benny/exelenteam/checkpoint-binya2/task6/"$$0) }' > /home/benny/exelenteam/checkpoint-binya2/task6/main.mod

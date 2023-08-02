@@ -1,0 +1,8 @@
+1.What is netfilter in the context of the Linux kernel?
+
+
+2.Explain the role of netfilter hooks and list the available types.
+
+
+3.How is Netfilter useful in the development of firewalls and packet filtering?
+

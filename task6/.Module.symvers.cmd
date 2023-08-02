@@ -1,0 +1,1 @@
+cmd_/home/benny/exelenteam/checkpoint-binya2/task6/Module.symvers :=  scripts/mod/modpost -m -a     -o /home/benny/exelenteam/checkpoint-binya2/task6/Module.symvers -T /home/benny/exelenteam/checkpoint-binya2/task6/modules.order -i Module.symvers -e 

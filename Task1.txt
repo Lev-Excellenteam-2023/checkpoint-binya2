@@ -1,0 +1,19 @@
+1.Explain what a kernel module is.
+A kernel module, is a piece of code that can be dynamically loaded and unloaded into the running kernel of an operating system.
+
+2.What are the advantages and disadvantages of using kernel modules?
+--advantages-- It extends the functionality of the kernel without the need to recompile or restart the entire operating system. Kernel modules allow developers to add new features, device drivers, or system functionalities without having to modify the core kernel code.
+--disadvantages--  Developing kernel modules requires a deep understanding of kernel internals and may involve more complex debugging compared to user-space programs, 
+In addition poorly written kernel modules can potentially compromise the system.
+  
+3.Explain the relationship between the kernel and a kernel module.
+The kernel is the core component of an operating system that manages system resources.
+A kernel module, is a separate piece of code that can be inserted into or removed from the kernel at runtime.
+When loaded, the kernel module becomes part of the running kernel, and it can utilize the kernel's functionalities and services.
+
+4.List some examples of real-world kernel modules.
+a.  provides support for graphics cards.
+b. create and manage virtual machines.
+c. enabling audio functionality.
+e. handles USB Human Interface Devices (HID), such as keyboards and mice.
+f. Info security support, such as network info filtering
